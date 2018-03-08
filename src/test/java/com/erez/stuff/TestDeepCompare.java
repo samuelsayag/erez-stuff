@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 public class TestDeepCompare  {
@@ -20,7 +21,7 @@ public class TestDeepCompare  {
     }
 
     @Test
-    public void simplePrimitive(){
+    public void simplePrimitiveIdentical(){
         String val1 = "toto";
         String val2 = "toto";
         List<FieldCompare> a = dp.deepCompare(val1,val2);
@@ -29,11 +30,30 @@ public class TestDeepCompare  {
     }
 
     @Test
-    public void simpleArray(){
+    public void simplePrimitiveDifferent(){
+        String val1 = "toto";
+        String val2 = "tata";
+        List<FieldCompare> a = dp.deepCompare(val1,val2);
+        assertEquals(1, a.size());
+        assertFalse(a.get(0).getCmp());
+    }
+
+    @Test
+    public void simpleArrayIdentical(){
         String val1 = "[1,2,3,4]";
         String val2 = "[1,2,3,4]";
         List<FieldCompare> a = dp.deepCompare(val1,val2);
         assertEquals(1, a.size());
         assertTrue(a.get(0).getCmp());
     }
+
+    @Test
+    public void simpleArrayDifferent(){
+        String val1 = "[1,2,3,4]";
+        String val2 = "[1,2,3,4]";
+        List<FieldCompare> a = dp.deepCompare(val1,val2);
+        assertEquals(1, a.size());
+        assertFalse(a.get(0).getCmp());
+    }
+
 }
