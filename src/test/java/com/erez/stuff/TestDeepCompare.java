@@ -27,4 +27,13 @@ public class TestDeepCompare  {
         assertEquals(1, a.size());
         assertTrue(a.get(0).getCmp());
     }
+
+    @Test
+    public void simpleArray(){
+        String val1 = "[1,2,3,4]";
+        String val2 = "[1,2,3,4]";
+        List<FieldCompare> a = dp.deepCompare(val1,val2);
+        assertEquals(1, a.size());
+        assertTrue(a.get(0).getCmp());
+    }
 }

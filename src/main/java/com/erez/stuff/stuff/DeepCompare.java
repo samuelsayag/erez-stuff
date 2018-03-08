@@ -44,30 +44,36 @@ public class DeepCompare {
             return acc;
         }
 
+        // for the moment the array is just like a base case
+        if (json1 instanceof JsonArray) {
+            acc.add(compare(path, (JsonArray) json1, json2));
+            return acc;
+        }
+
 
         return null;
     }
 
-    static public FieldCompare compare(String path,
-                                       JsonPrimitive val1,
-                                       JsonPrimitive val2) {
-        return new FieldCompare(
-                path,
-                val1.getAsString(),
-                val2.getAsString(),
-                val1.equals(val2));
-    }
-
-    static public FieldCompare compare(String path,
-                                       JsonArray val1,
-                                       JsonArray val2) {
-        // TODO - naive comparison of JsonArray but it would be nice to evolve to a comparison by cell
-        return new FieldCompare(
-                path,
-                val1.getAsString(),
-                val2.getAsString(),
-                val1.equals(val2));
-    }
+//    static public FieldCompare compare(String path,
+//                                       JsonPrimitive val1,
+//                                       JsonPrimitive val2) {
+//        return new FieldCompare(
+//                path,
+//                val1.getAsString(),
+//                val2.getAsString(),
+//                val1.equals(val2));
+//    }
+//
+//    static public FieldCompare compare(String path,
+//                                       JsonArray val1,
+//                                       JsonArray val2) {
+//        // TODO - naive comparison of JsonArray but it would be nice to evolve to a comparison by cell
+//        return new FieldCompare(
+//                path,
+//                val1.getAsString(),
+//                val2.getAsString(),
+//                val1.equals(val2));
+//    }
 
     static public <T extends JsonElement> FieldCompare compare(String path,
                                                                JsonNull jsonNull,
@@ -82,6 +88,17 @@ public class DeepCompare {
 
     static public <T extends JsonElement> FieldCompare compare(String path,
                                                                JsonPrimitive val1,
+                                                               T val2) {
+        return new FieldCompare(
+                path,
+                val1.getAsString(),
+                val2.getAsString(),
+                val1.equals(val2));
+    }
+
+
+    static public <T extends JsonElement> FieldCompare compare(String path,
+                                                               JsonArray val1,
                                                                T val2) {
         return new FieldCompare(
                 path,
