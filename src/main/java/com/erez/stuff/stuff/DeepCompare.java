@@ -50,6 +50,16 @@ public class DeepCompare {
             return acc;
         }
 
+        // for the moment the array is just like a base case
+        if (json1 instanceof JsonNull) {
+            acc.add(compare(path, JsonNull.INSTANCE, json2));
+            return acc;
+        }
+
+        // ...then it must be an JsonObject
+        //        ((JsonObject) json1).entrySet().stream().
+        // flatMap( [... map each JsonElement to a List<FieldCompare> ...] ).
+        // reduce( [... reduce to one List<FieldCompare>] ... )
 
         return null;
     }
@@ -57,17 +67,6 @@ public class DeepCompare {
 //    static public FieldCompare compare(String path,
 //                                       JsonPrimitive val1,
 //                                       JsonPrimitive val2) {
-//        return new FieldCompare(
-//                path,
-//                val1.getAsString(),
-//                val2.getAsString(),
-//                val1.equals(val2));
-//    }
-//
-//    static public FieldCompare compare(String path,
-//                                       JsonArray val1,
-//                                       JsonArray val2) {
-//        // TODO - naive comparison of JsonArray but it would be nice to evolve to a comparison by cell
 //        return new FieldCompare(
 //                path,
 //                val1.getAsString(),
