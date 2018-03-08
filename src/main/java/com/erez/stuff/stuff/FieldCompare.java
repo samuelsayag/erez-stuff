@@ -29,4 +29,11 @@ public class FieldCompare {
     public Boolean getCmp() {
         return cmp;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "[path: %s, val1: %s, val2: %s, comp: %s]",
+                getJsonPath(), getVal1(), getVal2(), getCmp().toString());
+    }
 }

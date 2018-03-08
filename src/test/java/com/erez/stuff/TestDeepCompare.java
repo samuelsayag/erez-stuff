@@ -57,4 +57,24 @@ public class TestDeepCompare  {
         assertFalse(a.get(0).getCmp());
     }
 
+    @Test
+    public void simpleObjectIdentical(){
+        String val1 = "{ \"id\" : 123 }";
+        String val2 = "{ \"id\" : 123 }";
+        List<FieldCompare> a = dp.deepCompare(val1,val2);
+        System.out.println(a.get(0));
+        assertEquals(1, a.size());
+        assertTrue(a.get(0).getCmp());
+    }
+
+    @Test
+    public void simpleObjectDifferent(){
+        String val1 = "{ \"id1\" : 123 }";
+        String val2 = "{ \"id2\" : 123 }";
+        List<FieldCompare> a = dp.deepCompare(val1,val2);
+        System.out.println(a.get(0));
+        assertEquals(1, a.size());
+        assertFalse(a.get(0).getCmp());
+    }
+
 }

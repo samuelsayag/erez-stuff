@@ -28,7 +28,7 @@ public class DeepCompare {
     public List<FieldCompare> deepCompare(JsonElement json1,
                                           JsonElement json2) {
         return deepCompare(
-                "",
+                "root",
                 new ArrayList<>(),
                 json1,
                 json2);
@@ -38,6 +38,8 @@ public class DeepCompare {
                                            List<FieldCompare> acc,
                                            JsonElement json1,
                                            JsonElement json2) {
+        if (json1 == null) { return acc; }
+
         if (json1.isJsonPrimitive()) {
             acc.add(compare(path, json1.getAsJsonPrimitive(), json2));
             return acc;
@@ -54,31 +56,29 @@ public class DeepCompare {
             return acc;
         }
 
-        // ...then it must be an JsonObject
-//        ((JsonObject) json1).entrySet().stream().map(entry -> {
-//            String updatedPath = String.format("%s / %s", path, entry.getKey());
-//            return null;
-//        });
-        // flatMap( [... map each JsonElement to a List<FieldCompare> ...] ).
-        // reduce( [... reduce to one List<FieldCompare>] ... )
+        // json1 is a JsonObject but we don't know about json2
+        if (json2 == null || !json2.isJsonObject()) {
+            acc.add(new FieldCompare(path, json1.toString(), jeToString(json2), false));
+            return acc;
+        }
 
-        return null;
+        // ...then it must be an JsonObject
+        JsonObject jo2 = json2.getAsJsonObject();
+        return json1.getAsJsonObject().entrySet().stream().map(entry -> {
+            String updatedPath = String.format("%s / %s", path, entry.getKey());
+            return deepCompare(updatedPath, acc, entry.getValue(), jo2.get(entry.getKey()));
+        }).reduce(
+                new ArrayList<>(),
+                (fc1, fc2) -> {
+                    fc1.addAll(fc2);
+                    return fc1;
+                });
+
     }
 
-
-//    static public FieldCompare compare(String path,
-//                                       JsonPrimitive val1,
-//                                       JsonPrimitive val2) {
-//        return new FieldCompare(
-//                path,
-//                val1.getAsString(),
-//                val2.getAsString(),
-//                val1.equals(val2));
-//    }
-
-    static public FieldCompare compare(String path,
-                                       JsonNull jsonNull,
-                                       JsonElement val2) {
+    static private FieldCompare compare(String path,
+                                        JsonNull jsonNull,
+                                        JsonElement val2) {
         return new FieldCompare(
                 path,
                 jsonNull.toString(),
@@ -87,9 +87,9 @@ public class DeepCompare {
     }
 
 
-    static public FieldCompare compare(String path,
-                                       JsonPrimitive val1,
-                                       JsonElement val2) {
+    static private FieldCompare compare(String path,
+                                        JsonPrimitive val1,
+                                        JsonElement val2) {
         return new FieldCompare(
                 path,
                 val1.toString(),
@@ -97,11 +97,10 @@ public class DeepCompare {
                 val1.equals(val2));
     }
 
-
-    static public FieldCompare compare(String path,
-                                       JsonArray val1,
-                                       JsonElement val2) {
-        System.out.println(val1.toString());
+    // TODO - identical to the primitive treatment but this will not always be
+    static private FieldCompare compare(String path,
+                                        JsonArray val1,
+                                        JsonElement val2) {
         return new FieldCompare(
                 path,
                 val1.toString(),
@@ -109,7 +108,7 @@ public class DeepCompare {
                 val1.equals(val2));
     }
 
-    static public String jeToString(JsonElement je){
+    static private String jeToString(JsonElement je) {
         return je == null ? "null" : je.toString();
     }
 
