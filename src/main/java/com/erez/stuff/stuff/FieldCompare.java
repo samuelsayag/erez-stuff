@@ -1,4 +1,4 @@
-package com.erez.stuff;
+package com.erez.stuff.stuff;
 
 public class FieldCompare {
 

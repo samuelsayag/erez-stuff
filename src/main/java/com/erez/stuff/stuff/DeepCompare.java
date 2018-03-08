@@ -1,4 +1,4 @@
-package com.erez.stuff;
+package com.erez.stuff.stuff;
 
 import com.google.gson.*;
 
@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeepCompare {
+
+    public DeepCompare(Gson gson) {
+        this.gson = gson;
+    }
 
     private Gson gson = null;
 
@@ -34,13 +38,19 @@ public class DeepCompare {
                                            List<FieldCompare> acc,
                                            JsonElement json1,
                                            JsonElement json2) {
+        // base case: json1 is a primitive
+        if (json1 instanceof JsonPrimitive) {
+            acc.add(compare(path, (JsonPrimitive) json1, json2));
+            return acc;
+        }
+
 
         return null;
     }
 
-    public FieldCompare compare(String path,
-                                JsonPrimitive val1,
-                                JsonPrimitive val2) {
+    static public FieldCompare compare(String path,
+                                       JsonPrimitive val1,
+                                       JsonPrimitive val2) {
         return new FieldCompare(
                 path,
                 val1.getAsString(),
@@ -59,14 +69,25 @@ public class DeepCompare {
                 val1.equals(val2));
     }
 
-    static public <T extends JsonElement> FieldCompare compare(JsonNull jsonNull,
-                                                               String path,
+    static public <T extends JsonElement> FieldCompare compare(String path,
+                                                               JsonNull jsonNull,
                                                                T val2) {
         return new FieldCompare(
                 path,
-                JsonNull.INSTANCE.getAsString(),
+                jsonNull.getAsString(),
                 val2.getAsString(),
                 val2 instanceof JsonNull);
+    }
+
+
+    static public <T extends JsonElement> FieldCompare compare(String path,
+                                                               JsonPrimitive val1,
+                                                               T val2) {
+        return new FieldCompare(
+                path,
+                val1.getAsString(),
+                val2.getAsString(),
+                val1.equals(val2));
     }
 
 }
