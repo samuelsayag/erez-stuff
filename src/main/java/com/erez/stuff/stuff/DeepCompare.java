@@ -4,24 +4,23 @@ import com.google.gson.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DeepCompare {
 
-    public DeepCompare(Gson gson) {
-        this.gson = gson;
+    public DeepCompare(JsonParser parser) {
+        this.parser = parser;
     }
 
-    private Gson gson = null;
+    private JsonParser parser = null;
 
     public List<FieldCompare> deepCompare(String json1,
                                           String json2) {
 
-        return this.gson == null ?
+        return this.parser == null ?
                 new ArrayList<>() :
                 deepCompare(
-                        gson.toJsonTree(json1),
-                        gson.toJsonTree(json2)
+                        parser.parse(json1),
+                        parser.parse(json2)
                 );
     }
 
@@ -39,21 +38,19 @@ public class DeepCompare {
                                            List<FieldCompare> acc,
                                            JsonElement json1,
                                            JsonElement json2) {
-        // base case: json1 is a primitive
-        if (json1 instanceof JsonPrimitive) {
-            acc.add(compare(path, (JsonPrimitive) json1, json2));
+        if (json1.isJsonPrimitive()) {
+            acc.add(compare(path, json1.getAsJsonPrimitive(), json2));
+            return acc;
+        }
+
+        if (json1.isJsonArray()) {
+            acc.add(compare(path, json1.getAsJsonArray(), json2));
             return acc;
         }
 
         // for the moment the array is just like a base case
-        if (json1 instanceof JsonArray) {
-            acc.add(compare(path, (JsonArray) json1, json2));
-            return acc;
-        }
-
-        // for the moment the array is just like a base case
-        if (json1 instanceof JsonNull) {
-            acc.add(compare(path, JsonNull.INSTANCE, json2));
+        if (json1.isJsonNull()) {
+            acc.add(compare(path, json1.getAsJsonNull(), json2));
             return acc;
         }
 
@@ -79,36 +76,41 @@ public class DeepCompare {
 //                val1.equals(val2));
 //    }
 
-    static public <T extends JsonElement> FieldCompare compare(String path,
-                                                               JsonNull jsonNull,
-                                                               T val2) {
+    static public FieldCompare compare(String path,
+                                       JsonNull jsonNull,
+                                       JsonElement val2) {
         return new FieldCompare(
                 path,
-                jsonNull.getAsString(),
-                val2.getAsString(),
-                val2 instanceof JsonNull);
+                jsonNull.toString(),
+                jeToString(val2),
+                val2.isJsonNull());
     }
 
 
-    static public <T extends JsonElement> FieldCompare compare(String path,
-                                                               JsonPrimitive val1,
-                                                               T val2) {
+    static public FieldCompare compare(String path,
+                                       JsonPrimitive val1,
+                                       JsonElement val2) {
         return new FieldCompare(
                 path,
-                val1.getAsString(),
-                val2.getAsString(),
+                val1.toString(),
+                jeToString(val2),
                 val1.equals(val2));
     }
 
 
-    static public <T extends JsonElement> FieldCompare compare(String path,
-                                                               JsonArray val1,
-                                                               T val2) {
+    static public FieldCompare compare(String path,
+                                       JsonArray val1,
+                                       JsonElement val2) {
+        System.out.println(val1.toString());
         return new FieldCompare(
                 path,
-                val1.getAsString(),
-                val2.getAsString(),
+                val1.toString(),
+                jeToString(val2),
                 val1.equals(val2));
+    }
+
+    static public String jeToString(JsonElement je){
+        return je == null ? "null" : je.toString();
     }
 
 }

@@ -3,6 +3,7 @@ package com.erez.stuff;
 import com.erez.stuff.stuff.DeepCompare;
 import com.erez.stuff.stuff.FieldCompare;
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class TestDeepCompare  {
 
-    private DeepCompare dp = new DeepCompare(new Gson());
+    private DeepCompare dp = new DeepCompare(new JsonParser());
 
     @Test
     public void dummy() {
