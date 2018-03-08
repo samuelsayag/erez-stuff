@@ -1,7 +1,7 @@
 package com.erez.stuff;
 
 public class FieldCompare {
-    
+
     public FieldCompare(String jsonPath, String val1, String val2, Boolean cmp) {
         this.jsonPath = jsonPath;
         this.val1 = val1;

@@ -43,10 +43,13 @@ public class DeepCompare {
         return null;
     }
 
-    static public <T> List<FieldCompare> compare(String path,
-                                                 JsonNull jsonNull,
+    static public <T extends JsonElement> List<FieldCompare> compare(JsonNull jsonNull,
+                                                 String path,
                                                  T val2) {
-        return null;
+        return return new FieldCompare(path,
+                JsonNull.INSTANCE.getAsString(),
+                val2.getAsString(),
+                true ? val2 instanceof JsonNull else false);
     }
 
 }
