@@ -4,6 +4,7 @@ import com.google.gson.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DeepCompare {
 
@@ -57,12 +58,16 @@ public class DeepCompare {
         }
 
         // ...then it must be an JsonObject
-        //        ((JsonObject) json1).entrySet().stream().
+//        ((JsonObject) json1).entrySet().stream().map(entry -> {
+//            String updatedPath = String.format("%s / %s", path, entry.getKey());
+//            return null;
+//        });
         // flatMap( [... map each JsonElement to a List<FieldCompare> ...] ).
         // reduce( [... reduce to one List<FieldCompare>] ... )
 
         return null;
     }
+
 
 //    static public FieldCompare compare(String path,
 //                                       JsonPrimitive val1,
