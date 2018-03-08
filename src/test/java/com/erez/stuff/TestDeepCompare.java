@@ -50,7 +50,7 @@ public class TestDeepCompare  {
     @Test
     public void simpleArrayDifferent(){
         String val1 = "[1,2,3,4]";
-        String val2 = "[1,2,3,4]";
+        String val2 = "[1,2,3,5]";
         List<FieldCompare> a = dp.deepCompare(val1,val2);
         assertEquals(1, a.size());
         assertFalse(a.get(0).getCmp());
