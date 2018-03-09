@@ -9,10 +9,10 @@ public class FieldCompare {
         this.cmp = cmp;
     }
 
-    String jsonPath = null;
-    String val1 = null;
-    String val2 = null;
-    Boolean cmp = false;
+    private String jsonPath = null;
+    private String val1 = null;
+    private String val2 = null;
+    private Boolean cmp = false;
 
     public String getJsonPath() {
         return jsonPath;
