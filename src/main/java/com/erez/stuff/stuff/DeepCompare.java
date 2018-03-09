@@ -66,7 +66,7 @@ public class DeepCompare {
         JsonObject jo2 = json2.getAsJsonObject();
         return json1.getAsJsonObject().entrySet().stream().map(entry -> {
             String updatedPath = String.format("%s / %s", path, entry.getKey());
-            return deepCompare(updatedPath, acc, entry.getValue(), jo2.get(entry.getKey()));
+            return deepCompare(updatedPath, new ArrayList<>(), entry.getValue(), jo2.get(entry.getKey()));
         }).reduce(
                 new ArrayList<>(),
                 (fc1, fc2) -> {

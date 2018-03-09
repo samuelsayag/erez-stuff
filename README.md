@@ -1,6 +1,8 @@
 Json Deep Compare
 =================
 
+!!! In Building !!!
+
 An skeleton project for a comparison of 2 json.
 
 For usage see test at: [these tests](src/test/java/TestDeepCompare.java) 
